@@ -49,6 +49,51 @@ final class AuthViewModelTests: XCTestCase {
         XCTAssertEqual(sut.errorMessage, AuthError.invalidCredentials.errorDescription)
     }
 
+    func testCanSubmitReflectsCredentialAndLoadingState() async {
+        let sut = AuthViewModel(
+            authService: MockAuthenticationService(behaviour: .success),
+            tokenStore: InMemorySecureTokenStore()
+        )
+
+        XCTAssertFalse(sut.canSubmit)
+
+        sut.email = "   "
+        sut.password = " \t"
+        XCTAssertFalse(sut.canSubmit)
+
+        sut.email = "user@example.com"
+        sut.password = "password"
+        XCTAssertTrue(sut.canSubmit)
+
+        let signInTask = Task {
+            await sut.signIn()
+        }
+
+        try? await Task.sleep(nanoseconds: 50_000_000)
+        XCTAssertFalse(sut.canSubmit)
+
+        await signInTask.value
+        XCTAssertFalse(sut.canSubmit)
+    }
+
+    func testSignInTrimsWhitespaceFromCredentials() async throws {
+        let tokenStore = InMemorySecureTokenStore()
+        let sut = AuthViewModel(
+            authService: MockAuthenticationService(behaviour: .success),
+            tokenStore: tokenStore
+        )
+
+        sut.advanceFromWelcome()
+        sut.email = "  user@example.com  "
+        sut.password = "  password  "
+
+        await sut.signIn()
+
+        XCTAssertEqual(sut.email, "user@example.com")
+        XCTAssertEqual(sut.password, "")
+        XCTAssertNotNil(try tokenStore.loadTokens())
+    }
+
     func testRefreshSessionHandlesExpiry() async {
         let tokenStore = InMemorySecureTokenStore()
         try? tokenStore.save(tokens: AuthTokens(accessToken: "signed_in_access", refreshToken: "stale_token", expiresAt: .distantPast))
