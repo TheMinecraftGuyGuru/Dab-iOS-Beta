@@ -20,7 +20,9 @@ This repository is being restructured to build a Swift-based native iOS experien
 
 - [x] Audit the Flutter project to catalogue core screens, navigation flows, and API integrations that must be replicated in SwiftUI.
   - [x] Catalogued feature modules (`features/auth`, `home`, `library`, `player`, `lyrics`, `search`) and the documented user journey from account sign-in through streaming and library engagement.
-  - [ ] Rebuild onboarding and authentication flows (login, token refresh, secure storage) that live under the Flutter `features/auth` module.
+  - [x] Rebuild onboarding and authentication flows (login, token refresh, secure storage) that live under the Flutter `features/auth` module.
+    - Implemented SwiftUI onboarding, sign-in, and signed-in shell screens powered by a stateful `AuthViewModel`.
+    - Added token persistence abstractions to mimic secure storage and covered the flows with XCTest cases.
   - [ ] Mirror home/discovery experiences from `features/home`, including curated content rails and quick entry points into playback.
   - [ ] Port library management flows from `features/library` (collection browsing, pagination, playlist organization) that rely on unlimited track handling.
   - [ ] Recreate the player module from `features/player` with advanced audio controls, background playback, and bridge hooks for the custom native audio engine.
