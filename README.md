@@ -18,7 +18,17 @@ This repository is being restructured to build a Swift-based native iOS experien
 
 ## Android-to-iOS Conversion To-Do List
 
-- [ ] Audit the Flutter project to catalogue core screens, navigation flows, and API integrations that must be replicated in SwiftUI.
+- [x] Audit the Flutter project to catalogue core screens, navigation flows, and API integrations that must be replicated in SwiftUI.
+  - [x] Catalogued feature modules (`features/auth`, `home`, `library`, `player`, `lyrics`, `search`) and the documented user journey from account sign-in through streaming and library engagement.
+  - [ ] Rebuild onboarding and authentication flows (login, token refresh, secure storage) that live under the Flutter `features/auth` module.
+  - [ ] Mirror home/discovery experiences from `features/home`, including curated content rails and quick entry points into playback.
+  - [ ] Port library management flows from `features/library` (collection browsing, pagination, playlist organization) that rely on unlimited track handling.
+  - [ ] Recreate the player module from `features/player` with advanced audio controls, background playback, and bridge hooks for the custom native audio engine.
+  - [ ] Translate the lyrics presentation stack from `features/lyrics`, covering synced/unsynced lyrics and overlays on the player.
+  - [ ] Implement global search surfaces aligned with `features/search`, ensuring deep-link navigation into albums, artists, and tracks.
+  - [ ] Integrate REST endpoints used by the Flutter client (authentication, library, playback, search, lyrics) with Swift async networking and caching equivalents.
+  - [ ] Map dependency injection/service locators (GetIt + Injectable) and shared utilities into Swift modules for modularity.
+  - [ ] Plan the Swift bridge for the custom native audio engine currently accessed through Kotlin ↔ Dart method channels.
 - [ ] Define SwiftUI architectural patterns (e.g., MVVM) and module boundaries that map cleanly to the existing Android feature areas.
 - [ ] Draft shared data models and service interfaces that mirror the Flutter counterparts, documenting gaps or platform-specific adjustments.
 - [ ] Design UI components and theming tokens that reproduce the Android look-and-feel while embracing iOS conventions.
