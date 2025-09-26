@@ -7,7 +7,7 @@ This directory holds the new Swift-based implementation for the Dab application.
 - `Package.swift` – Swift Package manifest that lets us bootstrap the project before generating an Xcode workspace.
 - `Sources/App/` – SwiftUI entry point and shared application scaffolding.
 - `Resources/` – Placeholder for assets that will be ported or recreated for iOS.
-- `Docs/` – Design notes, technical decisions, and references collected during development.
+- `Docs/` – Design notes, technical decisions, and references collected during development. See [`Docs/SelfHostedTheosRunner.md`](Docs/SelfHostedTheosRunner.md) for guidance on preparing a Linux self-hosted runner with Theos.
 
 ## Next Steps
 
