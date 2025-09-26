@@ -1,38 +1,44 @@
+#if canImport(SwiftUI)
 import SwiftUI
 
 @main
 struct DabApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(dependencies: .live)
         }
     }
 }
 
 struct ContentView: View {
+    @StateObject private var viewModel: AuthViewModel
+
+    init(dependencies: AppDependencies) {
+        _viewModel = StateObject(
+            wrappedValue: AuthViewModel(
+                authService: dependencies.authService,
+                tokenStore: dependencies.tokenStore
+            )
+        )
+    }
+
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 16) {
-                Image(systemName: "sparkles")
-                    .font(.system(size: 48))
-                    .foregroundStyle(.tint)
-
-                Text("Welcome to Dab iOS")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-
-                Text("This is the native SwiftUI rewrite. Use the Android Flutter project in ../android as a reference for flows, assets, and API interactions.")
-                    .multilineTextAlignment(.center)
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-
-                NavigationLink("Review Android Reference") {
-                    ReferenceInstructionsView()
-                }
-                .buttonStyle(.borderedProminent)
+        TabView {
+            NavigationStack {
+                OnboardingFlowView(viewModel: viewModel)
+                    .navigationTitle("Welcome")
             }
-            .padding()
-            .navigationTitle("Dab Preview")
+            .tabItem {
+                Label("Onboarding", systemImage: "person.badge.key")
+            }
+
+            NavigationStack {
+                ReferenceInstructionsView()
+                    .navigationTitle("Reference")
+            }
+            .tabItem {
+                Label("Reference", systemImage: "list.bullet")
+            }
         }
     }
 }
@@ -46,20 +52,29 @@ struct ReferenceInstructionsView: View {
                 Label("Recreate data flows using Swift Concurrency", systemImage: "bolt.horizontal")
             }
 
+            Section("Authentication Plan") {
+                Label("Implement OAuth flows", systemImage: "key.fill")
+                Label("Persist tokens in the Keychain", systemImage: "lock.circle")
+                Label("Bridge refresh logic to background tasks", systemImage: "arrow.clockwise")
+            }
+
             Section("Next Steps") {
                 Label("Define networking layer", systemImage: "network")
                 Label("Design reusable SwiftUI components", systemImage: "square.grid.2x2")
                 Label("Add unit tests", systemImage: "checkmark.shield")
             }
         }
-        .navigationTitle("Reference Checklist")
     }
 }
 
-#if DEBUG
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+#Preview("App Shell") {
+    ContentView(dependencies: .preview)
+}
+#else
+@main
+struct DabApp {
+    static func main() {
+        print("SwiftUI is not supported on this platform.")
     }
 }
 #endif
