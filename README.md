@@ -16,6 +16,17 @@ This repository is being restructured to build a Swift-based native iOS experien
 3. **Feature Development:** Recreate core Android features with SwiftUI views, using the `android/` Flutter implementation as a functional reference for UI flows and API interactions.
 4. **Testing & CI:** Add unit/UI tests and continuous integration workflows tailored for iOS.
 
+## Android-to-iOS Conversion To-Do List
+
+- [ ] Audit the Flutter project to catalogue core screens, navigation flows, and API integrations that must be replicated in SwiftUI.
+- [ ] Define SwiftUI architectural patterns (e.g., MVVM) and module boundaries that map cleanly to the existing Android feature areas.
+- [ ] Draft shared data models and service interfaces that mirror the Flutter counterparts, documenting gaps or platform-specific adjustments.
+- [ ] Design UI components and theming tokens that reproduce the Android look-and-feel while embracing iOS conventions.
+- [ ] Plan migration of networking, authentication, and persistence layers, identifying reusable logic vs. newly implemented services.
+- [ ] Prioritize feature parity milestones, including onboarding, core browsing experiences, and any monetization or social flows.
+- [ ] Establish testing strategy (unit, snapshot, and UI tests) and align CI coverage with the legacy app's critical paths.
+- [ ] Prepare rollout checklist for App Store delivery, analytics hooks, and user feedback loops once feature parity is achieved.
+
 ## Getting Started
 
 1. Install the latest Xcode and ensure the Swift toolchain is available (`swift --version`).
