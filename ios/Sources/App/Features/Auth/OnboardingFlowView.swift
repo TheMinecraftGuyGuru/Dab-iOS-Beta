@@ -119,7 +119,7 @@ private struct SignInView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(viewModel.isLoading)
+                .disabled(!viewModel.canSubmit)
 
                 Button("Forgot password?") {}
                     .buttonStyle(.borderless)

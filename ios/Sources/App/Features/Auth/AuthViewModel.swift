@@ -34,6 +34,10 @@ final class AuthViewModel: ObservableObject {
     private let authService: AuthenticationService
     private let tokenStore: SecureTokenStore
 
+    var canSubmit: Bool {
+        !normalizedEmail.isEmpty && !normalizedPassword.isEmpty && !isLoading
+    }
+
     init(authService: AuthenticationService, tokenStore: SecureTokenStore) {
         self.authService = authService
         self.tokenStore = tokenStore
@@ -69,19 +73,27 @@ final class AuthViewModel: ObservableObject {
     }
 
     func signIn() async {
-        guard !email.isEmpty, !password.isEmpty else {
+        guard !isLoading else { return }
+
+        let normalizedEmail = self.normalizedEmail
+        let normalizedPassword = self.normalizedPassword
+
+        guard !normalizedEmail.isEmpty, !normalizedPassword.isEmpty else {
             errorMessage = AuthError.invalidCredentials.errorDescription
             return
         }
 
+        email = normalizedEmail
+        password = normalizedPassword
         isLoading = true
         errorMessage = nil
 
         do {
-            let credentials = AuthCredentials(email: email, password: password)
+            let credentials = AuthCredentials(email: normalizedEmail, password: normalizedPassword)
             let tokens = try await authService.signIn(with: credentials)
             try tokenStore.save(tokens: tokens)
             activeTokens = tokens
+            password = ""
             animateTransition(to: .success)
         } catch let authError as AuthError {
             errorMessage = authError.errorDescription
@@ -131,5 +143,13 @@ final class AuthViewModel: ObservableObject {
 #else
         step = newStep
 #endif
+    }
+
+    private var normalizedEmail: String {
+        email.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var normalizedPassword: String {
+        password.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
